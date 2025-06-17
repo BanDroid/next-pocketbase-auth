@@ -1,4 +1,4 @@
-import db from "@/config/db";
+import createPocketbase from "@/config/db";
 import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
 import { isTokenExpired, RecordModel } from "pocketbase";
@@ -13,7 +13,7 @@ export async function middlewareAuth(req: NextRequest) {
   let model = null;
   let isAuthenticated = false;
   if (token && !isTokenExpired(token)) {
-    const { token: newToken, record } = await db
+    const { token: newToken, record } = await createPocketbase()
       .collection("users")
       .authRefresh({ headers: { Authorization: token } });
     storeCookie(newToken, record);

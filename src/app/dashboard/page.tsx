@@ -1,7 +1,7 @@
 import { auth } from "@/util/auth";
 
 export default async function Page() {
-  const { token, model } = await auth();
+  const { model } = await auth();
 
   return (
     <>

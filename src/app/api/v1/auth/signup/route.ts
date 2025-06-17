@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import db from "@/config/db";
-import { cookies } from "next/headers";
+import createPocketbase from "@/config/db";
 import { storeCookie } from "@/util/auth";
 import { revalidatePath } from "next/cache";
 import { ClientResponseError } from "pocketbase";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   // validate input -> create user record -> auth with new record -> set cookie
   const body = await req.json();
   if (!body.username || !body.email || !body.password || !body.passwordConfirm)
@@ -15,7 +14,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
     );
 
   try {
-    const record = await db
+    const pocketbase = createPocketbase();
+    const record = await pocketbase
       .collection("users")
       .create({ ...body, name: body.username, emailVisibility: true });
     if (record.status) {
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       );
     }
 
-    const { token, record: model } = await db
+    const { token, record: model } = await pocketbase
       .collection("users")
       .authWithPassword(record.email, body.password);
     await storeCookie(token, model);

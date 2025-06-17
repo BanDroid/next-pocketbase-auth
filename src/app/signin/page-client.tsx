@@ -1,6 +1,6 @@
 "use client";
 
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
 
 export default function PageClient() {
@@ -9,7 +9,7 @@ export default function PageClient() {
     identity: "",
     password: "",
   });
-  const [error, setError] = useState("");
+  const [, setError] = useState("");
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputs((prevInputs) => ({
       ...prevInputs,

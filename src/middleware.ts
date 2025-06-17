@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { isTokenExpired } from "pocketbase";
 import { middlewareAuth } from "./util/auth";
 
 export async function middleware(req: NextRequest) {

@@ -1,5 +1,3 @@
-import db from "@/config/db";
-
 export default function Page() {
   return (
     <>

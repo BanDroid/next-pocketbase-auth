@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import db from "@/config/db";
-import { cookies } from "next/headers";
+import createPocketbase from "@/config/db";
 import { storeCookie } from "@/util/auth";
 import { ClientResponseError } from "pocketbase";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   // validate input -> auth with body request -> set cookie
   const body = await req.json();
   if (!body.identity || !body.password)
@@ -16,7 +14,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     );
 
   try {
-    const { token, record: model } = await db
+    const { token, record: model } = await createPocketbase()
       .collection("users")
       .authWithPassword(body.identity, body.password);
     await storeCookie(token, model);
