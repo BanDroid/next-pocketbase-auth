@@ -16,7 +16,7 @@ export async function middlewareAuth(req: NextRequest) {
     const { token: newToken, record } = await createPocketbase()
       .collection("users")
       .authRefresh({ headers: { Authorization: token } });
-    storeCookie(newToken, record);
+    await storeCookie(newToken, record);
     isAuthenticated = true;
     token = newToken;
     model = record;
